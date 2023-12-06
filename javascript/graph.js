@@ -1,14 +1,48 @@
 class Graph {
   constructor(paths) {
+    this.graph = {};
+
+    if (paths.length === 1) {
+      this.graph[paths[0]] = new Set();
+      return;
+    }
+
+    for (const path of paths){
+      for (let i=0; i < path.length -1; i++){
+        const firstNode = path[i];
+        const secondNode = path[i+1];
+        this.addVertex(firstNode, [secondNode]);        
+      }
+    }
 
   }
 
   isAdjacent(vertexA, vertexB) {
+    if (vertexA in this.graph){
+      return this.graph[vertexA].has(vertexB)
+    }
 
+    return false;
   }
 
   // array is an adjacency list
   addVertex(vertex, array) {
+    for (let i=0; i < array.length; i++){
+      const firstNode = vertex;
+      const secondNode = array[i];
+      
+      if (firstNode in this.graph){
+        this.graph[firstNode].add(secondNode);
+      }else{
+        this.graph[firstNode] = new Set(secondNode);
+      }
+
+      if (secondNode in this.graph){
+        this.graph[secondNode].add(firstNode);
+      }else{
+        this.graph[secondNode] = new Set(firstNode)
+      }
+    }
 
   }
 }
